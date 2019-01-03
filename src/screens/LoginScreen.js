@@ -5,14 +5,14 @@ import {
   Button,
   StyleSheet,
   TextInput,
-  ImageBackground,
+  Image,
 } from 'react-native';
 import FloatingLabelInput from './../UI/FloatingLabelInput';
 
 class LoginScreen extends Component {
-  static navigationOptions = {
-    title: 'Ponto Mobile',
-  };
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: (<View><Image source={require('./../img/chama.jpg')} resizeMode="contain" /><Text>Ponto Mobile</Text></View>),
+  });
 
   state = {
     cartao: '',
@@ -25,6 +25,7 @@ class LoginScreen extends Component {
   render () {
     return (
       <View style={styles.container}>
+        <Image source={require ('./../img/logo_ufrgs_new.png')} style={{width: 100 }} resizeMode="contain" />
         <FloatingLabelInput
           label="Cartão UFRGS"
           value={this.state.cartao}
