@@ -2,16 +2,20 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Button,
   StyleSheet,
-  TextInput,
   Image,
+  AsyncStorage
 } from 'react-native';
 import FloatingLabelInput from './../UI/FloatingLabelInput';
+import DefaultButton from './../UI/DefaultButton';
 
-class LoginScreen extends Component {
+export default class LoginScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: (<View><Image source={require('./../img/chama.jpg')} resizeMode="contain" /><Text>Ponto Mobile</Text></View>),
+    headerTitle: (
+      <View style={{width: "100%", flex: 1}}>
+        <Image source={require('./../img/chama.jpg')} style={{width: 100, height: 57, position: 'absolute', right: -10, top: -15}} resizeMode="contain" />
+        <Text style={{fontSize: 20, fontWeight:"bold", left: 35, color: "#FFF"}}>Ponto Mobile</Text>
+      </View>),
   });
 
   state = {
@@ -25,7 +29,7 @@ class LoginScreen extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <Image source={require ('./../img/logo_ufrgs_new.png')} style={{width: 100 }} resizeMode="contain" />
+        <Image source={require ('./../img/logo_ufrgs_new.png')} style={{width: 100, marginBottom:15 }} resizeMode="contain" />
         <FloatingLabelInput
           label="Cartão UFRGS"
           value={this.state.cartao}
@@ -41,17 +45,22 @@ class LoginScreen extends Component {
           onChangeText={this.handlePassChange}
         />
 
-        <Button
+        <DefaultButton
           style={styles.inputButton}
-          title="                                Entrar                                "
-          onPress={() => this.props.navigation.navigate ('Controle')}
+          title="Entrar"
+          width="85%"
+          onPress={this._signInAsync}
         />
 
       </View>
     );
   }
+
+  _signInAsync = async () => {
+    await AsyncStorage.setItem('userToken', 'abc');
+    this.props.navigation.navigate('App');
+  }
 }
-export default LoginScreen;
 
 const styles = StyleSheet.create ({
   container: {

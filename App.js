@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './src/screens/LoginScreen';
 import ControleScreen from './src/screens/ControleScreen';
 import PerfilScreen from './src/screens/PerfilScreen';
+import AuthLoadingScreen from './src/screens/AuthLoadingscreen';
 
 const AppStack = createBottomTabNavigator (
   {
@@ -57,11 +58,12 @@ const AuthStack = createStackNavigator (
 export default createAppContainer (
   createSwitchNavigator (
     {
+      AuthLoading: AuthLoadingScreen,
       App: AppStack,
       Auth: AuthStack,
     },
     {
-      initialRouteName: 'Auth',
+      initialRouteName: 'AuthLoading',
     }
   )
 );
