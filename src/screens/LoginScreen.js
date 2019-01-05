@@ -6,10 +6,12 @@ import {
   Image,
   AsyncStorage
 } from 'react-native';
+import { connect } from 'react-redux';
 import FloatingLabelInput from './../UI/FloatingLabelInput';
 import DefaultButton from './../UI/DefaultButton';
+import { login} from './../store/actions/index';
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
       <View style={{width: "100%", flex: 1}}>
@@ -61,6 +63,19 @@ export default class LoginScreen extends Component {
     this.props.navigation.navigate('App');
   }
 }
+const mapStateToProps = state =>{
+  return{
+    cartao: state.auth.cartao,
+    senha: state.auth.senha
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin : () => dispatch(login())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create ({
   container: {
