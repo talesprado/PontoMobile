@@ -1,15 +1,27 @@
-import {LOGIN, LOGOUT} from './actionTypes';
+import {LOGIN, LOGOUT, SET_USER, SET_PASS} from './actionTypes';
 
-export const login = (cartaoInformado, senhaInformada) => {
-    return {
-        type: LOGIN,
-        cartao: cartaoInformado,
-        senha: senhaInformada
-    };
+export const login = () => {
+  return {
+    type: LOGIN,
+  };
+};
+
+export const setUser = cartao => {
+  return {
+    type: SET_USER,
+    cartao: cartao,
+  };
+};
+
+export const setPass = senha => {
+  return {
+    type: SET_PASS,
+    senha: senha,
+  };
 };
 
 export const logout = () => {
-    return {
-        type: LOGOUT
-    }
-}
+  return {
+    type: LOGOUT,
+  };
+};

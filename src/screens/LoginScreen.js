@@ -4,37 +4,63 @@ import {
   Text,
   StyleSheet,
   Image,
-  AsyncStorage
+  AsyncStorage,
+  ToastAndroid,
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import FloatingLabelInput from './../UI/FloatingLabelInput';
 import DefaultButton from './../UI/DefaultButton';
-import { login} from './../store/actions/index';
+import {login} from './../store/actions/index';
+import {setUser, setPass} from '../store/actions/auth';
 
 class LoginScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <View style={{width: "100%", flex: 1}}>
-        <Image source={require('./../img/chama.jpg')} style={{width: 100, height: 57, position: 'absolute', right: -10, top: -15}} resizeMode="contain" />
-        <Text style={{fontSize: 20, fontWeight:"bold", left: 35, color: "#FFF"}}>Ponto Mobile</Text>
-      </View>),
+      <View style={{width: '100%', flex: 1}}>
+        <Image
+          source={require ('./../img/chama.jpg')}
+          style={{
+            width: 100,
+            height: 57,
+            position: 'absolute',
+            right: -10,
+            top: -15,
+          }}
+          resizeMode="contain"
+        />
+        <Text
+          style={{fontSize: 20, fontWeight: 'bold', left: 35, color: '#FFF'}}
+        >
+          Ponto Mobile
+        </Text>
+      </View>
+    ),
   });
 
-  state = {
-    cartao: '',
-    senha: '',
+  handleCartaoChange = newCartao => {
+    this.props.onCartaoChange (newCartao);
   };
 
-  handleCartaoChange = newCartao => this.setState ({cartao: newCartao});
-  handlePassChange = newPass => this.setState ({senha: newPass});
-
+  handlePassChange = newPass => {
+    this.props.onPassChange (newPass);
+  };
   render () {
+    const enableButton = this.props.cartao !== '' && this.props.senha !== '';
+    ToastAndroid.showWithGravity (
+      'All Your Base Are Belong To Us',
+      ToastAndroid.LONG,
+      ToastAndroid.CENTER
+    );
     return (
       <View style={styles.container}>
-        <Image source={require ('./../img/logo_ufrgs_new.png')} style={{width: 100, marginBottom:15 }} resizeMode="contain" />
+        <Image
+          source={require ('./../img/logo_ufrgs_new.png')}
+          style={{width: 100, marginBottom: 15}}
+          resizeMode="contain"
+        />
         <FloatingLabelInput
           label="Cartão UFRGS"
-          value={this.state.cartao}
+          value={this.props.cartao}
           onChangeText={this.handleCartaoChange}
           keyboardType="numeric"
           maxLength={8}
@@ -43,7 +69,7 @@ class LoginScreen extends Component {
         <FloatingLabelInput
           label="Senha"
           secureTextEntry={true}
-          value={this.state.senha}
+          value={this.props.senha}
           onChangeText={this.handlePassChange}
         />
 
@@ -52,6 +78,7 @@ class LoginScreen extends Component {
           title="Entrar"
           width="85%"
           onPress={this._signInAsync}
+          disabled={!enableButton}
         />
 
       </View>
@@ -59,23 +86,25 @@ class LoginScreen extends Component {
   }
 
   _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('App');
-  }
+    await AsyncStorage.setItem ('userToken', 'abc');
+    this.props.navigation.navigate ('App');
+  };
 }
-const mapStateToProps = state =>{
-  return{
+const mapStateToProps = state => {
+  return {
     cartao: state.auth.cartao,
-    senha: state.auth.senha
-  }
-}
+    senha: state.auth.senha,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin : () => dispatch(login())
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+    onLogin: () => dispatch (login ()),
+    onCartaoChange: cartao => dispatch (setUser (cartao)),
+    onPassChange: senha => dispatch (setPass (senha)),
+  };
+};
+export default connect (mapStateToProps, mapDispatchToProps) (LoginScreen);
 
 const styles = StyleSheet.create ({
   container: {
