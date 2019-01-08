@@ -10,7 +10,7 @@ import {
 import {connect} from 'react-redux';
 import FloatingLabelInput from './../UI/FloatingLabelInput';
 import DefaultButton from './../UI/DefaultButton';
-import {try_auth} from './../store/actions/index';
+import {try_auth, authGetToken, authAutoSignIn} from './../store/actions/index';
 
 class LoginScreen extends Component {
   state = {
@@ -73,9 +73,10 @@ class LoginScreen extends Component {
     })
   }
 
-  render () {    
+  render () {      
     return (
       <View style={styles.container}>
+        <Text>nada por aqui</Text>
         <Image
           source={require ('./../img/logo_ufrgs_new.png')}
           style={{width: 100, marginBottom: 15}}
@@ -117,9 +118,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin: (authData) => dispatch (try_auth (authData)),   
+    onLogin: (authData) => dispatch (try_auth (authData)),
+    onAutoSignIn: () => dispatch(authAutoSignIn())
   };
 };
+
+
+
 export default connect (mapStateToProps, mapDispatchToProps) (LoginScreen);
 
 const styles = StyleSheet.create ({

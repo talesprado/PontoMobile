@@ -1,14 +1,9 @@
 import {AUTH_SET_TOKEN} from './../actions/actionTypes';
 import {AsyncStorage} from 'react-native';
 
-const initialState = {
-  token: {
-    access_token: null,
-    expires_in : null,
-    token_type: null,
-    scope: null,
-    refresh_token: null
-  }
+const initialState = {  
+  access_token: null,
+  expires_in : null,      
 };
 
 
@@ -18,9 +13,9 @@ const reducer = (state = initialState, action) => {
     case AUTH_SET_TOKEN: 
       return {
         ...state,        
-        token: action.token 
+        access_token: action.access_token,
+        expires_in: action.expires_in
       }
-
     default:
       return state;
   }

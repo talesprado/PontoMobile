@@ -1,26 +1,14 @@
 import React, {Component} from 'react';
 import {View, ActivityIndicator, StatusBar, StyleSheet, AsyncStorage, Text} from 'react-native';
-import {authGetToken} from './../store/actions/index';
+import {authGetToken, authAutoSignIn} from './../store/actions/index';
+import {connect} from 'react-redux';
 
-export default class AuthLoadingScreen extends Component {
-    constructor () {
-        super();
-        this._bootstrapAsync();
+class AuthLoadingScreen extends Component {
+    constructor (props) {
+        super(props);        
+        this.props.onAutoSignIn();
     }
-
-    _bootstrapAsync = async () => {
-        console.log("nao atualizou");
-        return dispatch => {
-            dispatch(authGetToken)
-            .catch(err => console.log(err))
-            .then(storageToken => {
-                const token = "abx";
-                this.props.navigation.navigate(token ? 'App' : 'Auth');
-            })
-        }
-        
-    }
-
+  
     render() {
         return (
             <View style={styles.container}>
@@ -31,6 +19,14 @@ export default class AuthLoadingScreen extends Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAutoSignIn : () => dispatch(authAutoSignIn())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AuthLoadingScreen);
 
 const styles = StyleSheet.create({
     container: {

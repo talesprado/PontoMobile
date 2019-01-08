@@ -10,8 +10,7 @@ export const try_auth = (authData) => {
     const client_id = '';
     const client_secret = '';
     const grant_type = '';
-    const scope = '';
-    console.log(authData);
+    const scope = 'meus-os';    
     fetch(
       url,
       {
@@ -48,27 +47,34 @@ export const try_auth = (authData) => {
 export const authStoreToken = token => {
   return dispatch => {
     dispatch(authSetToken(token));
-    AsyncStorage.setItem("pm:auth:token", token);    
+    AsyncStorage.setItem("pm:auth:access_token", token.access_token);    
+    AsyncStorage.setItem("pm:auth:expires_in", token.expires_in);
   }
 }
 
-export const authSetToken = token => {  
+export const authSetToken = (access_token, expires_in) => {  
   return {
     type: AUTH_SET_TOKEN,
-    token: token
+    access_token: access_token,
+    expires_in: expires_in
   }
 }
 
 export const authGetToken = () => {
   return (dispatch, getState) => {
     const promise = new Promise((resolve, reject) => {
-      const token = getState().auth.token;
-      if(!token.access_token){
-        AsyncStorage.getItem("pm:auth:token")
+      const access_token = getState().auth.access_token;      
+      if(!access_token){
+        AsyncStorage.getItem("pm:auth:access_token")
         .catch(err => reject())
-        .then(tokenFromStorage => {
+        .then(tokenFromStorage => {   
+          console.log(tokenFromStorage)       
+          if(!tokenFromStorage){            
+            NavigationService.navigate('Auth');             
+            return;
+          }
           dispatch(authSetToken(tokenFromStorage));
-          resolve(tokenFromStorage)
+          resolve(tokenFromStorage);
         });        
       }else{
         resolve(token);
@@ -78,9 +84,30 @@ export const authGetToken = () => {
   };
 }
 
-export const logout = () => {
-  return {
-    type: LOGOUT,
+export const authAutoSignIn = () => {
+  return dispatch => {
+    dispatch(authGetToken())    
+    .then(token => {      
+      NavigationService.navigate('App'); 
+      return;
+    })
+    .catch(err => {
+      console.log(err)
+    });    
+  }
+}
+
+export const authClearStorage = () => {
+  return dispatch => {
+    return AsyncStorage.removeItem("pm:auth:access_token");    
+  }
+}
+
+export const authLogout = () => {
+  return dispatch => {
+    dispatch(authClearStorage()).then(() => {
+      NavigationService.navigate('Auth');
+    });
   };
 };
 

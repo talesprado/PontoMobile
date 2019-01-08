@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Button, AsyncStorage} from 'react-native';
 import DefaultButton from './../UI/DefaultButton';
+import {connect } from 'react-redux';
+import {authLogout} from './../store/actions/index';
 
 class LoginScreen extends Component {
   render () {
@@ -9,19 +11,20 @@ class LoginScreen extends Component {
         <Text>Controle Screen</Text>        
         <DefaultButton 
           style={styles.inputButton} 
-          onPress={this._signOutAsync}
+          onPress={this.props.onLogout}
           title="Sair"
           width="90%"
           />
       </View>
     );
-  }
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('AuthLoading');
+  }  
+}
+const mapDispatchToProps = dispatch => {
+  return{
+    onLogout: dispatch(authLogout())
   }
 }
-export default LoginScreen;
+export default connect(null, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create ({
   container: {
