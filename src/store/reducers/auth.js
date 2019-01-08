@@ -1,21 +1,25 @@
-import {LOGIN, LOGOUT, SET_PASS, SET_USER} from './../actions/actionTypes';
+import {AUTH_SET_TOKEN} from './../actions/actionTypes';
+import {AsyncStorage} from 'react-native';
 
 const initialState = {
-  cartao: '',
-  senha: '',
+  token: {
+    access_token: null,
+    expires_in : null,
+    token_type: null,
+    scope: null,
+    refresh_token: null
+  }
 };
+
+
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_PASS:
+    case AUTH_SET_TOKEN: 
       return {
-        ...state,
-        senha: action.senha,
-      };
-    case SET_USER:
-      return {
-        ...state,
-        cartao: action.cartao,
-      };
+        ...state,        
+        token: action.token 
+      }
 
     default:
       return state;

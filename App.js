@@ -5,6 +5,7 @@ import {
   createAppContainer,
   createBottomTabNavigator,
 } from 'react-navigation';
+import NavigationService from './NavigationService';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginScreen from './src/screens/LoginScreen';
@@ -55,7 +56,7 @@ const AuthStack = createStackNavigator (
   }
 );
 
-export default createAppContainer (
+const AppContainer = createAppContainer (
   createSwitchNavigator (
     {
       AuthLoading: AuthLoadingScreen,
@@ -67,3 +68,13 @@ export default createAppContainer (
     }
   )
 );
+export default class App extends React.Component {
+  render() {
+    return (
+      <AppContainer ref={navigatorRef => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+      }}
+      />
+    )
+  }
+}

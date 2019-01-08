@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, ActivityIndicator, StatusBar, StyleSheet, AsyncStorage, Text} from 'react-native';
+import {authGetToken} from './../store/actions/index';
 
 export default class AuthLoadingScreen extends Component {
     constructor () {
@@ -8,8 +9,16 @@ export default class AuthLoadingScreen extends Component {
     }
 
     _bootstrapAsync = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+        console.log("nao atualizou");
+        return dispatch => {
+            dispatch(authGetToken)
+            .catch(err => console.log(err))
+            .then(storageToken => {
+                const token = "abx";
+                this.props.navigation.navigate(token ? 'App' : 'Auth');
+            })
+        }
+        
     }
 
     render() {
